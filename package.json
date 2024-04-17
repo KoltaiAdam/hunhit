@@ -13,8 +13,8 @@
   "dependencies": {
     "@vue-youtube/core": "^0.0.6",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
-    "vue3-barcode-qrcode-reader": "^1.0.16"
+    "vue-qrcode-reader": "^5.5.3",
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",

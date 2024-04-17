@@ -7,7 +7,7 @@ import VueDevTools from 'vite-plugin-vue-devtools'
 // https://vitejs.dev/config/
 export default defineConfig({
   optimizeDeps: {
-    include: ['vue3-barcode-qrcode-reader']
+    include: ['vue-qrcode-reader']
   },
   plugins: [vue(), VueDevTools()],
   resolve: {

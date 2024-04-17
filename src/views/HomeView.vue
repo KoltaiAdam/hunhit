@@ -1,16 +1,16 @@
 <script setup>
-import { StreamQrcodeBarcodeReader } from 'vue3-barcode-qrcode-reader'
+import { QrcodeStream } from 'vue-qrcode-reader'
 import { usePlayer, PlayerState } from '@vue-youtube/core'
 
-import { ref } from 'vue'
+import { ref, nextTick } from 'vue'
 
-const refCamera = ref(StreamQrcodeBarcodeReader)
-
-let videoId = ref('xbCtRr4_qP4')
+let videoId = ref('')
 const youtube = ref()
 
 let playerState = ref()
 let readerIsActive = ref(false)
+let readerIsLoading = ref(false)
+let readerError = ref()
 
 const { onReady, togglePlay, onStateChange } = usePlayer (videoId, youtube, {
   cookie: false,
@@ -33,22 +33,15 @@ onStateChange((event) => {
   }
 });
 
-function playStream() {
-  readerIsActive.value = true
-  refCamera.value?.onCanPlay()
-}
-
-function stopStream () {
+async function playStream() {
+  readerIsLoading.value = true
   readerIsActive.value = false
-  refCamera.value?.onCanStop()
+  await nextTick()
+  readerIsActive.value = true
 }
-
-function onLoaded () {
-  console.log('Component loaded')
-}
-
-function onLoading () {
-  console.log('Component loading')
+async function stopStream() {
+  readerIsActive.value = false
+  await nextTick()
 }
 
 function onResult (result) {
@@ -56,7 +49,15 @@ function onResult (result) {
     return
   }
   readerIsActive.value = false
-  videoId.value = extractVideoID(result?.text)
+  videoId.value = extractVideoID(result[0].rawValue)
+}
+
+function onCameraOn () {
+  readerIsLoading.value = false
+}
+
+function onError (error) {
+  readerError.value = error.name
 }
 
 function extractVideoID(url) {
@@ -72,19 +73,24 @@ function extractVideoID(url) {
 
 <template>
   <main>
-    <button v-if="readerIsActive" @click="stopStream">Szünet</button>
-    <button v-else @click="playStream">Következő dal</button>
-    <StreamQrcodeBarcodeReader
-      ref="refCamera"
-      capture="shoot"
-      @loaded="onLoaded"
-      @onloading="onLoading"
-      @result="onResult"
-      show-on-stream
-    />
-    <div class="youtube-div" ref="youtube" @ready="onReady" />
-    <button v-if="playerState === -1 || playerState === 5 || playerState === 2 || playerState === 0" @click="togglePlay">Start</button>
-    <button v-else @click="togglePlay">Stop</button>
+    <div class="control">
+      <button v-if="readerIsActive" @click="stopStream">Kamera kikapcs</button>
+      <button v-else @click="playStream">Következő dal</button>
+    </div>
+    <div class="stream">
+      <qrcode-stream v-if="readerIsActive" @detect="onResult" @error="onError" @camera-on="onCameraOn">
+        <div v-if="readerIsLoading" class="loading-indicator">Kamera betöltése</div>
+      </qrcode-stream>
+    </div>
+    <div class="youtube">
+      <div class="youtube-div" ref="youtube" @ready="onReady" />
+    </div>
+    <div class="youtube-control">
+      <button v-if="playerState === -1 || playerState === 5 || playerState === 2 || playerState === 0" @click="togglePlay" :disabled="videoId === ''">Indít</button>
+      <button v-else-if="playerState === 3" disabled>Betöltés</button>
+      <button v-else @click="togglePlay">Állj</button>
+    </div>
+    <div v-if="readerError" class="error">{{ readerError }}</div>
   </main>
 </template>
 
@@ -100,6 +106,7 @@ function extractVideoID(url) {
     margin: 2rem;
     padding: 2rem;
     font-size: 2rem;
+    width: 20rem;
   }
   .btn-reset {
     display: none;
@@ -107,5 +114,12 @@ function extractVideoID(url) {
   iframe {
     width: 0;
     height: 0;
+  }
+  .loading-indicator {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    color: grey;
   }
 </style>

@@ -61,6 +61,10 @@ function onError (error) {
   readerError.value = error.name
 }
 
+function reloadPage() {
+  window.location.reload()
+}
+
 function extractVideoID(url) {
   var regExp = /^.*((youtu.be\/)|(v\/)|(\/u\/\w\/)|(embed\/)|(watch\?))\??v?=?([^#\&\?]*).*/;
   var match = url.match(regExp);
@@ -101,17 +105,21 @@ function extractVideoID(url) {
         <FontAwesomeIcon :icon="['fas', 'stop']" />
       </button>
     </div>
-    <div v-if="readerError" class="error">{{ readerError }}</div>
+    <div v-if="readerError" class="error">
+      <button @click="reloadPage" class="error">
+        <FontAwesomeIcon :icon="['fas', 'camera-rotate']" />
+      </button>
+      {{ readerError }}</div>
   </main>
 </template>
 
 <style>
   main {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    text-align: center;
   }
   button {
     background: url(../assets/background_semi_transparent.png);
@@ -120,12 +128,15 @@ function extractVideoID(url) {
     color: #aaaaaa;
     font-size: 4rem;
     height: 15rem;
-    margin: 2rem;
+    margin: .5rem;
     padding: 0;
     width: 15rem;
   }
   button:disabled {
     color: #333333;
+  }
+  .error {
+    color: lightcoral;
   }
 
   .btn-reset {

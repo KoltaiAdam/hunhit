@@ -87,8 +87,8 @@ function extractVideoID(url) {
         <FontAwesomeIcon :icon="['fas', 'camera']" />
       </button>
     </div>
-    <div class="stream">
-      <qrcode-stream v-if="readerIsActive" @detect="onResult" @error="onError" @camera-on="onCameraOn">
+    <div v-if="readerIsActive" class="stream">
+      <qrcode-stream @detect="onResult" @error="onError" @camera-on="onCameraOn">
       </qrcode-stream>
     </div>
     <div class="youtube">
@@ -126,14 +126,14 @@ function extractVideoID(url) {
   }
   button {
     background: url(../assets/background_semi_transparent.png);
-    background-size: 15rem 15rem;
+    background-size: 10rem 10rem;
     border: 0;
     color: #aaaaaa;
-    font-size: 4rem;
-    height: 15rem;
+    font-size: 3rem;
+    height: 10rem;
     margin: .5rem;
     padding: 0;
-    width: 15rem;
+    width: 10rem;
   }
   button:disabled {
     color: #333333;

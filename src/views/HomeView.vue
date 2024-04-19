@@ -124,7 +124,10 @@ function extractVideoID(url) {
     text-align: center;
   }
   .stream {
-    height: 400px;
+    max-width: 350px;
+    margin: 20px 15px;
+    border: 5px solid white;
+    border-radius: .5rem;
   }
   button {
     background: url(../assets/background_semi_transparent.png);

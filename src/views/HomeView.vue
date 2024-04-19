@@ -3,6 +3,7 @@ import { QrcodeStream } from 'vue-qrcode-reader'
 import { usePlayer, PlayerState } from '@vue-youtube/core'
 
 import { ref, nextTick } from 'vue'
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 let videoId = ref('')
 const youtube = ref()
@@ -74,21 +75,31 @@ function extractVideoID(url) {
 <template>
   <main>
     <div class="control">
-      <button v-if="readerIsActive" @click="stopStream">Kamera kikapcs</button>
-      <button v-else @click="playStream">Következő dal</button>
+      <button v-if="readerIsActive" @click="stopStream">
+        <FontAwesomeIcon v-if="readerIsLoading" :icon="['fas', 'hourglass-half']" />
+        <FontAwesomeIcon v-else :icon="['fas', 'power-off']" />
+      </button>
+      <button v-else @click="playStream">
+        <FontAwesomeIcon :icon="['fas', 'camera']" />
+      </button>
     </div>
     <div class="stream">
       <qrcode-stream v-if="readerIsActive" @detect="onResult" @error="onError" @camera-on="onCameraOn">
-        <div v-if="readerIsLoading" class="loading-indicator">Kamera betöltése</div>
       </qrcode-stream>
     </div>
     <div class="youtube">
       <div class="youtube-div" ref="youtube" @ready="onReady" />
     </div>
     <div class="youtube-control">
-      <button v-if="playerState === -1 || playerState === 5 || playerState === 2 || playerState === 0" @click="togglePlay" :disabled="videoId === ''">Indít</button>
-      <button v-else-if="playerState === 3" disabled>Betöltés</button>
-      <button v-else @click="togglePlay">Állj</button>
+      <button v-if="playerState === -1 || playerState === 5 || playerState === 2 || playerState === 0" @click="togglePlay" :disabled="videoId === ''">
+        <FontAwesomeIcon :icon="['fas', 'play']" />
+      </button>
+      <button v-else-if="playerState === 3" disabled>
+        <FontAwesomeIcon :icon="['fas', 'hourglass-half']" />
+      </button>
+      <button v-else @click="togglePlay">
+        <FontAwesomeIcon :icon="['fas', 'stop']" />
+      </button>
     </div>
     <div v-if="readerError" class="error">{{ readerError }}</div>
   </main>
@@ -103,11 +114,20 @@ function extractVideoID(url) {
     height: 100vh;
   }
   button {
+    background: url(../assets/background_semi_transparent.png);
+    background-size: 15rem 15rem;
+    border: 0;
+    color: #aaaaaa;
+    font-size: 4rem;
+    height: 15rem;
     margin: 2rem;
-    padding: 2rem;
-    font-size: 2rem;
-    width: 20rem;
+    padding: 0;
+    width: 15rem;
   }
+  button:disabled {
+    color: #333333;
+  }
+
   .btn-reset {
     display: none;
   }

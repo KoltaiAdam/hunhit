@@ -122,8 +122,7 @@ function extractVideoID(url) {
     text-align: center;
   }
   .stream {
-    height: 300px;
-    width: 100%;
+    height: 400px;
   }
   button {
     background: url(../assets/background_semi_transparent.png);

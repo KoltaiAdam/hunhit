@@ -79,23 +79,23 @@ function extractVideoID(url) {
 <template>
   <main>
     <div v-if="readerIsActive" class="stream">
+      <div class="youtube">
+        <div class="youtube-div" ref="youtube" @ready="onReady" />
+      </div>
       <qrcode-stream @detect="onResult" @error="onError" @camera-on="onCameraOn">
-      </qrcode-stream>
-    </div>
-    <div class="youtube">
-      <div class="youtube-div" ref="youtube" @ready="onReady" />
-    </div>
-    <div class="controls">
-      <div class="stream-control">
-        <button v-if="readerIsActive" @click="stopStream">
+        <button @click="stopStream">
           <FontAwesomeIcon v-if="readerIsLoading" :icon="['fas', 'hourglass-half']" />
           <FontAwesomeIcon v-else :icon="['fas', 'power-off']" />
         </button>
-        <button v-else @click="playStream">
+      </qrcode-stream>
+    </div>
+    <div class="controls">
+      <div class="stream-control">
+        <button v-if="!readerIsActive" @click="playStream">
           <FontAwesomeIcon :icon="['fas', 'camera']" />
         </button>
       </div>
-      <div class="youtube-control">
+      <div class="youtube-control" v-if="!readerIsActive">
         <button v-if="playerState === -1 || playerState === 5 || playerState === 2 || playerState === 0" @click="togglePlay" :disabled="videoId === ''">
           <FontAwesomeIcon :icon="['fas', 'play']" />
         </button>
@@ -124,10 +124,16 @@ function extractVideoID(url) {
     text-align: center;
   }
   .stream {
-    max-width: 350px;
-    margin: 20px 15px;
-    border: 5px solid white;
+    max-width: 100%;
+    border: 1px solid white;
     border-radius: .5rem;
+    div {
+      div {
+        top: initial !important;
+        height: initial !important;
+        bottom: 0;
+      }
+    }
   }
   button {
     background: url(../assets/background_semi_transparent.png);

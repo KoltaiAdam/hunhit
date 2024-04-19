@@ -121,6 +121,10 @@ function extractVideoID(url) {
     width: 100%;
     text-align: center;
   }
+  .stream {
+    height: 300px;
+    width: 100%;
+  }
   button {
     background: url(../assets/background_semi_transparent.png);
     background-size: 15rem 15rem;
@@ -139,18 +143,8 @@ function extractVideoID(url) {
     color: lightcoral;
   }
 
-  .btn-reset {
-    display: none;
-  }
   iframe {
     width: 0;
     height: 0;
-  }
-  .loading-indicator {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    width: 100%;
-    color: grey;
   }
 </style>

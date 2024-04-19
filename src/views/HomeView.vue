@@ -78,15 +78,6 @@ function extractVideoID(url) {
 
 <template>
   <main>
-    <div class="control">
-      <button v-if="readerIsActive" @click="stopStream">
-        <FontAwesomeIcon v-if="readerIsLoading" :icon="['fas', 'hourglass-half']" />
-        <FontAwesomeIcon v-else :icon="['fas', 'power-off']" />
-      </button>
-      <button v-else @click="playStream">
-        <FontAwesomeIcon :icon="['fas', 'camera']" />
-      </button>
-    </div>
     <div v-if="readerIsActive" class="stream">
       <qrcode-stream @detect="onResult" @error="onError" @camera-on="onCameraOn">
       </qrcode-stream>
@@ -94,16 +85,27 @@ function extractVideoID(url) {
     <div class="youtube">
       <div class="youtube-div" ref="youtube" @ready="onReady" />
     </div>
-    <div class="youtube-control">
-      <button v-if="playerState === -1 || playerState === 5 || playerState === 2 || playerState === 0" @click="togglePlay" :disabled="videoId === ''">
-        <FontAwesomeIcon :icon="['fas', 'play']" />
-      </button>
-      <button v-else-if="playerState === 3" disabled>
-        <FontAwesomeIcon :icon="['fas', 'hourglass-half']" />
-      </button>
-      <button v-else @click="togglePlay">
-        <FontAwesomeIcon :icon="['fas', 'stop']" />
-      </button>
+    <div class="controls">
+      <div class="stream-control">
+        <button v-if="readerIsActive" @click="stopStream">
+          <FontAwesomeIcon v-if="readerIsLoading" :icon="['fas', 'hourglass-half']" />
+          <FontAwesomeIcon v-else :icon="['fas', 'power-off']" />
+        </button>
+        <button v-else @click="playStream">
+          <FontAwesomeIcon :icon="['fas', 'camera']" />
+        </button>
+      </div>
+      <div class="youtube-control">
+        <button v-if="playerState === -1 || playerState === 5 || playerState === 2 || playerState === 0" @click="togglePlay" :disabled="videoId === ''">
+          <FontAwesomeIcon :icon="['fas', 'play']" />
+        </button>
+        <button v-else-if="playerState === 3" disabled>
+          <FontAwesomeIcon :icon="['fas', 'hourglass-half']" />
+        </button>
+        <button v-else @click="togglePlay">
+          <FontAwesomeIcon :icon="['fas', 'stop']" />
+        </button>
+      </div>
     </div>
     <div v-if="readerError" class="error">
       <button @click="reloadPage" class="error">
@@ -141,7 +143,10 @@ function extractVideoID(url) {
   .error {
     color: lightcoral;
   }
-
+  .controls {
+    display: flex;
+    justify-content: center;
+  }
   iframe {
     width: 0;
     height: 0;

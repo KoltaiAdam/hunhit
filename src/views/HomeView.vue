@@ -125,8 +125,8 @@ function extractVideoID(url) {
   }
   .stream {
     max-width: 350px;
-    margin: 20px 15px;
-    border: 5px solid white;
+    margin: 0px 15px;
+    border: 1px solid white;
     border-radius: .5rem;
   }
   button {

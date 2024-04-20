@@ -23,7 +23,8 @@ const { onReady, togglePlay, onStateChange } = usePlayer (videoId, youtube, {
   width: 0
 })
 
-onReady((event) => {
+onReady(async (event) => {
+  await nextTick()
   event.target.playVideo();
 });
 
@@ -78,9 +79,11 @@ function extractVideoID(url) {
 
 <template>
   <main>
-    <div v-if="readerIsActive" class="stream">
-      <qrcode-stream @detect="onResult" @error="onError" @camera-on="onCameraOn">
-      </qrcode-stream>
+    <div v-if="readerIsActive" class="stream-wrapper">
+      <div class="stream">
+        <qrcode-stream @detect="onResult" @error="onError" @camera-on="onCameraOn">
+        </qrcode-stream>
+      </div>
     </div>
     <div class="youtube">
       <div class="youtube-div" ref="youtube" @ready="onReady" />
@@ -123,14 +126,17 @@ function extractVideoID(url) {
     width: 100%;
     text-align: center;
   }
+  .stream-wrapper {
+    display: flex;
+    justify-content: center;
+    margin: 0 1rem;
+    border-radius: 1rem;
+  }
   .stream {
-    max-width: 350px;
-    margin: 0px 15px;
-    border: 1px solid white;
-    border-radius: .5rem;
+    max-width: 620px;    
   }
   button {
-    background: url(../assets/background_semi_transparent.png);
+    background: url(../assets/button_background.png);
     background-size: 10rem 10rem;
     border: 0;
     color: #aaaaaa;
